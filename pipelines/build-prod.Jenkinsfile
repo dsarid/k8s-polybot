@@ -46,7 +46,7 @@ pipeline {
                     ls 
                     
                     # build an image
-                    docker build -t $IMAGE_FULL_NAME .
+                    docker build -t $IMAGE_FULL_NAME polybot/
                     docker push $IMAGE_FULL_NAME
                     echo -n $IMAGE_FULL_NAME > IMAGE_FULL_NAME.txt
                 '''
