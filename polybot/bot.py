@@ -131,7 +131,7 @@ class ObjectDetectionBot(Bot):
             if self.filter == "Predict":
                 photo_path = self.download_user_photo(msg)
 
-                logger.info("\nDownload image\n")
+                logger.info(f"\nDownload image: {self.images_bucket}\n")
 
                 photo_path = self._add_date_to_filename_(photo_path)
 

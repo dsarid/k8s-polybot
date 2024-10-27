@@ -7,7 +7,6 @@ import polybot_helper_lib
 import json
 
 
-
 app = flask.Flask(__name__)
 
 TELEGRAM_SECRET_TOKEN = os.environ['TELEGRAM_SECRET_TOKEN']
