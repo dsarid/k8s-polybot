@@ -57,8 +57,8 @@ pipeline {
         }
         stage('Trigger Deploy') {
             steps {
-                build job: 'NetflixDeploy', wait: false, parameters: [
-                string(name: 'SERVICE_NAME', value: "int-polybot"),
+                build job: 'polybot_deploy_prod', wait: false, parameters: [
+                string(name: 'SERVICE_NAME', value: "polybot"),
                 string(name: 'IMAGE_FULL_NAME_PARAM', value: "$IMAGE_FULL_NAME_PARAM")
                 ]
             }
