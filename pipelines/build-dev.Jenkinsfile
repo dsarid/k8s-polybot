@@ -19,7 +19,7 @@ pipeline {
         // GIT_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
         // TIMESTAMP = new Date().format("yyyyMMdd-HHmmss")
 
-        IMAGE_TAG = "prod_v0.2.$BUILD_NUMBER"
+        IMAGE_TAG = "dev_v0.2.$BUILD_NUMBER"
         IMAGE_BASE_NAME = "int-polybot"
 
         DOCKER_CREDS = credentials('dockerhub')
@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Trigger Deploy') {
             steps {
-                build job: 'deploy_prod', wait: false, parameters: [
+                build job: 'deploy_dev', wait: false, parameters: [
                 string(name: 'SERVICE_NAME', value: "polybot"),
                 string(name: 'IMAGE_FULL_NAME_PARAM', value: "$IMAGE_FULL_NAME_PARAM")
                 ]
