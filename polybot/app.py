@@ -5,9 +5,19 @@ from bot import ObjectDetectionBot
 import boto3
 import polybot_helper_lib
 import json
+from prometheus_client import Counter, Summary, make_wsgi_app, Info
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.utils import secure_filename
+
 
 
 app = flask.Flask(__name__)
+
+requests_metric = Counter('requests_total', 'HTTP Requests', ['method', 'endpoint'])
+
+app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+    '/metrics': make_wsgi_app()
+})
 
 TELEGRAM_SECRET_TOKEN = os.environ['TELEGRAM_SECRET_TOKEN']
 print(f"{TELEGRAM_SECRET_TOKEN} and the first letter is: {TELEGRAM_SECRET_TOKEN[0]}")
@@ -28,6 +38,7 @@ def index():
 
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
+    requests_metric.labels(request.method, request.path).inc()
     req = request.get_json()
     bot.handle_message(req['message'])
     return 'Ok'
@@ -40,6 +51,7 @@ def status():
 
 @app.route(f'/results', methods=['POST'])
 def results():
+    requests_metric.labels(request.method, request.path).inc()
     prediction_id = request.args.get('predictionId')
 
     if "NONE:" == prediction_id[:5]:
